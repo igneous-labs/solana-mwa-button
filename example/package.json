@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite"
+  },
+  "dependencies": {
+    "base58-js": "^2.0.0",
+    "solana-mwa-button": "workspace:^"
+  },
+  "devDependencies": {
+    "glob": "^9.3.4",
+    "vite": "^4.2.1"
+  }
+}

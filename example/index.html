@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="module">
+      import { binary_to_base58 } from "base58-js";
+      import {
+        defineCustomElement,
+        WALLET_AUTHORIZED_EVENT_TYPE,
+        WALLET_DISCONNECTED_EVENT_TYPE,
+        ERROR_EVENT_TYPE,
+      } from "solana-mwa-button";
+
+      const base64ToUint8 = (str) =>
+        Uint8Array.from(atob(str), (c) => c.charCodeAt(0));
+
+      async function stake() {
+        const btn = document.querySelector("solana-mwa-button");
+        const user = binary_to_base58(base64ToUint8(btn.accounts[0].address));
+        const url = `https://stakedex-api.fly.dev/v1/swap?inputMint=So11111111111111111111111111111111111111112&outputMint=LAinEtNLgpmCP9Rvsf5Hn8W6EhNiKLZQti1xfWMLy6X&inAmount=1000000000&user=${user}`;
+        const resp = await fetch(url);
+        const { tx } = await resp.json();
+
+        /*
+        const { val: signedTx } = await btn.transact(async (wallet) => {
+          const { signed_payloads: [signedTx] } = await wallet.signTransactions({
+            payloads: [tx],
+          });
+          return signedTx
+        });
+        alert(`Signed TX: ${JSON.stringify(signedTx)}`);
+        */
+
+        const { val: signature } = await btn.transact(async (wallet) => {
+          const {
+            signatures: [signature],
+          } = await wallet.signAndSendTransactions({
+            payloads: [tx],
+          });
+          return signature;
+        });
+        alert(`Signature: ${binary_to_base58(base64ToUint8(signature))}`);
+      }
+
+      defineCustomElement();
+
+      window.addEventListener(
+        WALLET_AUTHORIZED_EVENT_TYPE,
+        ({ detail: accounts }) => {
+          document.getElementById("first-account").innerText = binary_to_base58(
+            base64ToUint8(accounts[0].address)
+          );
+          document.getElementById("stake-button").removeAttribute("disabled");
+          document
+            .getElementById("disconnect-button")
+            .removeAttribute("disabled");
+        }
+      );
+      window.addEventListener(WALLET_DISCONNECTED_EVENT_TYPE, () => {
+        document.getElementById("first-account").innerText = "None";
+        document.getElementById("stake-button").setAttribute("disabled", "1");
+        document
+          .getElementById("disconnect-button")
+          .setAttribute("disabled", "1");
+      });
+
+      document.getElementById("disconnect-button").onclick = () => {
+        document.querySelector("solana-mwa-button").disconnect();
+      };
+
+      document.getElementById("stake-button").onclick = stake;
+
+      document
+        .querySelector("solana-mwa-button")
+        .addEventListener(ERROR_EVENT_TYPE, (event) => {
+          alert(event.detail);
+        });
+    </script>
+    <link href="index.css" rel="stylesheet" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, minimum-scale=1"
+    />
+    <title>Example solana-mwa-button app</title>
+  </head>
+  <body>
+    <h1>Example solana-mwa-button app</h1>
+    <h2>Connect:</h2>
+    <solana-mwa-button cluster="mainnet-beta" name="Test dApp">
+    </solana-mwa-button>
+    <h3>First Account: <span id="first-account">None</span></h3>
+    <footer>
+      <button type="button" id="disconnect-button" disabled>Disconnect</button>
+      <button type="button" id="stake-button" disabled>
+        Stake 1 SOL to Laine
+      </button>
+    </footer>
+  </body>
+</html>

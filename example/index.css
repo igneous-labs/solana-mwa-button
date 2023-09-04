@@ -1,0 +1,37 @@
+solana-mwa-button {
+  display: block; /* custom element default to display: inline */
+}
+
+solana-mwa-button > button {
+  display: flex;
+  align-items: center;
+  height: 3rem;
+  font-size: 1rem;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h3 {
+  font-weight: normal;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+h3 > span {
+  font-weight: bold;
+}
+
+footer {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+#stake-button,
+#disconnect-button {
+  font-size: large;
+}
