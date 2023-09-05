@@ -63,6 +63,10 @@ importers:
       '@solana-mobile/mobile-wallet-adapter-protocol':
         specifier: ^2
         version: 2.0.0(react-native@0.72.4)
+    devDependencies:
+      typescript:
+        specifier: ^5
+        version: 5.0.2
 
 packages:
 
@@ -5872,6 +5876,12 @@ packages:
       call-bind: 1.0.2
       for-each: 0.3.3
       is-typed-array: 1.1.10
+    dev: true
+
+  /typescript@5.0.2:
+    resolution: {integrity: sha512-wVORMBGO/FAs/++blGNeAVdbNKtIh1rbBL2EyQ1+J9lClJ93KiiKe8PmFIVdXhHcyv44SL9oglmfeSsndo0jRw==}
+    engines: {node: '>=12.20'}
+    hasBin: true
     dev: true
 
   /uglify-es@3.3.9:

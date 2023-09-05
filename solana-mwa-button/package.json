@@ -1,14 +1,28 @@
 {
   "name": "solana-mwa-button",
-  "version": "0.1.0",
-  "main": "./src/index.js",
-  "exports": "./src/index.js",
+  "version": "0.1.1",
+  "main": "src/index.js",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./src/index.js"
+    }
+  },
+  "types": "types/index.d.ts",
   "type": "module",
   "license": "Apache-2.0",
   "files": [
-    "src/"
+    "src/",
+    "types/index.d.ts"
   ],
+  "scripts": {
+    "prepack": "pnpm typegen",
+    "typegen": "pnpm tsc src/index.js --skipLibCheck --declaration --allowJs --emitDeclarationOnly --outDir types"
+  },
   "dependencies": {
     "@solana-mobile/mobile-wallet-adapter-protocol": "^2"
+  },
+  "devDependencies": {
+    "typescript": "^5"
   }
 }
